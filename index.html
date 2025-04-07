@@ -120,6 +120,195 @@
       width: 100%;
     }
     
+   /* Mobile Navigation */
+   .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      z-index: 1001;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .mobile-menu-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background-color: white;
+      position: relative;
+      transition: var(--transition-standard);
+    }
+    
+    .mobile-menu-btn span::before,
+    .mobile-menu-btn span::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 2px;
+      background-color: white;
+      transition: var(--transition-standard);
+    }
+    
+    .mobile-menu-btn span::before {
+      top: -6px;
+    }
+    
+    .mobile-menu-btn span::after {
+      top: 6px;
+    }
+    
+    .mobile-menu-btn.active span {
+      background-color: transparent;
+    }
+    
+    .mobile-menu-btn.active span::before {
+      transform: rotate(45deg);
+      top: 0;
+    }
+    
+    .mobile-menu-btn.active span::after {
+      transform: rotate(-45deg);
+      top: 0;
+    }
+    
+    .mobile-nav-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 300px;
+      height: 100vh;
+      background-color: white;
+      z-index: 1000;
+      padding: 80px 30px 30px;
+      box-shadow: var(--shadow-lg);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .mobile-nav-menu.active {
+      transform: translateX(0);
+    }
+    
+    .mobile-nav-menu a {
+      display: block;
+      padding: 15px 0;
+      text-decoration: none;
+      color: var(--dark-color);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: var(--transition-standard);
+    }
+    
+    .mobile-nav-menu a:hover,
+    .mobile-nav-menu a:focus {
+      color: var(--accent-color);
+      padding-left: 10px;
+    }
+    
+    .mobile-nav-menu a:last-child {
+      border-bottom: none;
+      margin-top: 20px;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition-standard);
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Hide desktop nav on mobile */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      
+      .mobile-menu-btn {
+        display: flex;
+      }
+    }
+    
+    /* Show desktop nav on larger screens */
+    @media (min-width: 769px) {
+      .mobile-menu-btn,
+      .mobile-nav-menu,
+      .overlay {
+        display: none !important;
+      }
+    }
+
+    /* Rest of your existing styles... */
+    /* [Previous CSS styles remain unchanged until the media queries] */
+    
+    @media (max-width: 768px) {
+      /* Remove the previous .nav-menu styles for mobile */
+      /* Keep all other existing mobile styles */
+      
+      .category-icon-container {
+        width: 70px;
+        height: 70px;
+        margin-right: 15px;
+      }
+      
+      .category-title {
+        font-size: 1.1rem;
+      }
+      
+      .procedure-link {
+        font-size: 0.9rem;
+      }
+      
+      .page-title {
+        font-size: 1.8rem;
+      }
+      
+      .decoration {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .category-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .category-icon-container {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .procedure-list {
+        padding-left: 0;
+      }
+      
+      .page-title {
+        font-size: 1.6rem;
+      }
+    }
+
     /* Improved Procedures grid */
     .procedures-grid {
       display: grid;
@@ -558,6 +747,23 @@
   </style>
 </head>
 <body>
+
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" aria-expanded="false">
+    <span></span>
+  </button>
+  
+  <!-- Mobile Navigation Menu -->
+  <div class="mobile-nav-menu" id="mobileNavMenu">
+    <a href="https://drzaidshakir3.github.io/drzaidshakir/">Book Consultation</a>
+    <a href="https://drzaidshakir.com/contact">Contact</a>
+    <a href="https://drzaidshakir.com/about-us">About Us</a>
+    <a href="https://drzaidshakir.com/home1">Home</a>
+  </div>
+  
+  <!-- Overlay for mobile menu -->
+  <div class="overlay" id="overlay"></div>
+
   <nav class="nav-menu" aria-label="Main navigation">
     <a href="https://drzaidshakir3.github.io/drzaidshakir/">Book Consultation</a>
     <a href="https://drzaidshakir.com/contact">Contact</a>
@@ -574,8 +780,8 @@
       <h1 class="page-title">Advanced Cosmetic Procedures</h1>
     </header>
     
-    <!-- Search Bar -->
-    <div class="search-container">
+     <!-- Search Bar -->
+     <div class="search-container">
       <input type="text" id="searchInput" class="search-input" placeholder="Search procedures (e.g. 'liposuction', 'facelift')" aria-label="Search cosmetic procedures">
       <div class="search-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -819,7 +1025,32 @@
   </button>
   
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileNavMenu = document.getElementById('mobileNavMenu');
+      const overlay = document.getElementById('overlay');
+      
+      if (mobileMenuBtn && mobileNavMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+          this.classList.toggle('active');
+          mobileNavMenu.classList.toggle('active');
+          overlay.classList.toggle('active');
+          
+          // Update aria-expanded attribute
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+        });
+        
+        overlay.addEventListener('click', function() {
+          mobileMenuBtn.classList.remove('active');
+          mobileNavMenu.classList.remove('active');
+          this.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
+      
+      // [Rest of your existing JavaScript remains unchanged]
       // Back to Top button functionality with scaling
       const backToTopButton = document.getElementById('backToTop');
       const docHeight = document.documentElement.scrollHeight;
